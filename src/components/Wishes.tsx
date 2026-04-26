@@ -4,6 +4,7 @@ import {
   query,
   orderByChild,
   limitToLast,
+  onValue,
   get,
   endAt,
 } from "firebase/database";
@@ -16,41 +17,54 @@ const Wishes = () => {
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  
+  // Track the timestamp of the oldest message in the initial real-time batch
+  const oldestInBatchRef = useRef<number | null>(null);
 
-  // Initial Fetch: Last 50 messages
+  // Real-time Listener: Always keep the last 50 messages updated
   useEffect(() => {
-    const fetchInitial = async () => {
-      setLoading(true);
-      const wishesRef = query(
-        ref(db, "demo/responses"),
-        orderByChild("timestamp"),
-        limitToLast(50),
-      );
+    setLoading(true);
+    const latestQuery = query(
+      ref(db, "demo/responses"),
+      orderByChild("timestamp"),
+      limitToLast(50),
+    );
 
-      try {
-        const snapshot = await get(wishesRef);
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          const wishlist = Object.keys(data)
-            .map((key) => ({
-              id: key,
-              ...data[key],
-            }))
-            .sort((a, b) => b.timestamp - a.timestamp); // Manual sort to be safe
+    const unsubscribe = onValue(latestQuery, (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        const latestBatch = Object.keys(data)
+          .map((key) => ({
+            id: key,
+            ...data[key],
+          }))
+          .sort((a, b) => b.timestamp - a.timestamp);
 
-          setWishes(wishlist);
-          if (wishlist.length < 50) setHasMore(false);
-        } else {
-          setHasMore(false);
+        setWishes((prevWishes) => {
+          // If we haven't loaded more yet, just use the latest batch
+          if (prevWishes.length <= 50) {
+            return latestBatch;
+          }
+          
+          // If we have "loaded more" items, we only want to update the "top" part of the list
+          // and keep the older items we already fetched via pagination
+          const olderItems = prevWishes.filter(
+            pw => !latestBatch.find(lb => lb.id === pw.id) && pw.timestamp < latestBatch[latestBatch.length - 1].timestamp
+          );
+          return [...latestBatch, ...olderItems];
+        });
+
+        if (latestBatch.length > 0) {
+          oldestInBatchRef.current = latestBatch[latestBatch.length - 1].timestamp;
         }
-      } catch (error) {
-        console.error("Error fetching initial wishes:", error);
-      } finally {
-        setLoading(false);
+        if (latestBatch.length < 50) setHasMore(false);
+      } else {
+        setHasMore(false);
       }
-    };
+      setLoading(false);
+    });
 
-    fetchInitial();
+    return () => unsubscribe();
   }, []);
 
   const loadMore = async () => {
@@ -59,7 +73,7 @@ const Wishes = () => {
     setLoadingMore(true);
     const oldestTimestamp = wishes[wishes.length - 1].timestamp;
 
-    // Fetch next 20 older messages
+    // Fetch next 20 older messages (one-time fetch is fine for history)
     const moreRef = query(
       ref(db, "demo/responses"),
       orderByChild("timestamp"),
@@ -86,14 +100,14 @@ const Wishes = () => {
     } catch (error) {
       console.error("Error loading more wishes:", error);
     } finally {
-      setLoadingMore(false);
+      setLoadingMore(true); // Small hack to show indicator briefly
+      setTimeout(() => setLoadingMore(false), 500);
     }
   };
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
-    // If we are 50px from the bottom, load more
-    if (scrollHeight - scrollTop <= clientHeight + 50) {
+    if (scrollHeight - scrollTop <= clientHeight + 100) {
       loadMore();
     }
   };
@@ -121,7 +135,6 @@ const Wishes = () => {
           </div>
         ) : (
           <div className="relative">
-            {/* Scrollable Container */}
             <div
               ref={scrollContainerRef}
               onScroll={handleScroll}
@@ -142,7 +155,7 @@ const Wishes = () => {
                           <h4 className="text-white font-sans text-sm font-medium leading-none mb-1">
                             {wish.name || "Anonymous"}
                           </h4>
-                          <span className="text-[10px] text-emerald-500/60 uppercase tracking-tighter">
+                          <span className={`text-[10px] uppercase tracking-tighter ${wish.status === 'hadir' ? 'text-emerald-500/60' : 'text-white/20'}`}>
                             {wish.status === "hadir"
                               ? "Attending"
                               : "Sent Wishes"}
@@ -166,16 +179,14 @@ const Wishes = () => {
                 ))}
               </div>
 
-              {/* Loading More Indicator */}
               {loadingMore && (
                 <div className="flex justify-center py-6">
                   <div className="w-6 h-6 border-2 border-white/5 border-t-white/40 rounded-full animate-spin" />
                 </div>
               )}
 
-              {/* End of data message */}
               {!hasMore && wishes.length > 0 && (
-                <div className="text-center py-10 opacity-20">
+                <div className="text-center py-10 opacity-20 border-t border-white/5">
                   <p className="font-serif italic text-sm">
                     You've reached the end of the wishes.
                   </p>
@@ -183,7 +194,6 @@ const Wishes = () => {
               )}
             </div>
 
-            {/* Gradient Overlay */}
             {hasMore && (
               <div className="absolute bottom-0 left-0 right-0 h-24 bg-linear-to-t from-[#0a0a0a] to-transparent pointer-events-none" />
             )}
