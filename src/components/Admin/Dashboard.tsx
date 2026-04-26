@@ -46,7 +46,9 @@ const Dashboard = () => {
   const stats = {
     total: responses.length,
     attending: responses.filter(r => r.status === "hadir").length,
-    totalGuests: responses.reduce((acc, curr) => acc + parseInt(curr.guests || 0), 0)
+    totalGuests: responses
+      .filter(r => r.status === "hadir")
+      .reduce((acc, curr) => acc + (parseInt(curr.guests) || 0), 0)
   };
 
   const filteredResponses = responses.filter(r => 
