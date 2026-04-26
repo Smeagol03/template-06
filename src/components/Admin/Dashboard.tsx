@@ -56,7 +56,25 @@ const Dashboard = () => {
   const handleSignOut = () => signOut(auth);
 
   const generatedUrl = `${WEDDING_DATA.baseUrl}/?to=${encodeURIComponent(guestName)}`;
-  const messageTemplate = `Tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i ${guestName || '[Nama Tamu]'} untuk menghadiri acara pernikahan kami.\n\nBerikut link undangan digital kami:\n${generatedUrl}\n\nTerima kasih.`;
+  
+  const messageTemplate = `Assalamu'alaikum Wr. Wb.
+
+Bismillahirramanirrahim.
+Tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i ${guestName || '[Nama Tamu]'} untuk menghadiri acara pernikahan kami.
+
+"Dengan memohon rahmat dan ridho Tuhan Yang Maha Esa, kami bermaksud menyelenggarakan pernikahan kami."
+
+Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu kepada kami berdua.
+
+Silakan klik tautan di bawah ini untuk melihat detail undangan:
+${generatedUrl}
+
+Atas kehadiran dan doa restunya, kami ucapkan terima kasih.
+
+Wassalamu'alaikum Wr. Wb.
+
+Kami yang berbahagia,
+${WEDDING_DATA.couple.groom.name.split(' ')[0]} & ${WEDDING_DATA.couple.bride.name.split(' ')[0]}`;
 
   const copyToClipboard = (text: string, setter: (v: boolean) => void) => {
     navigator.clipboard.writeText(text);
