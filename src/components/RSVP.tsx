@@ -85,7 +85,7 @@ const RSVP = () => {
 
         {/* RSVP Form Card */}
         <div className="rsvp-form relative group">
-          <div className="relative z-10 p-8 md:p-12 rounded-[2.5rem] bg-white/[0.02] border border-white/10 backdrop-blur-xl overflow-hidden">
+          <div className="relative z-10 p-8 md:p-12 rounded-[2.5rem] bg-white/2 border border-white/10 backdrop-blur-xl overflow-hidden">
             {isSuccess ? (
               <div className="py-12 text-center space-y-4 animate-in fade-in zoom-in duration-500">
                 <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center mx-auto mb-6">
@@ -173,7 +173,7 @@ const RSVP = () => {
                       setFormData({ ...formData, message: e.target.value })
                     }
                     placeholder="Tuliskan ucapan selamat dan doa untuk mempelai..."
-                    className="w-full px-6 py-5 rounded-[2rem] bg-white/5 border border-white/10 text-white font-sans focus:outline-none focus:border-white/30 transition-colors resize-none"
+                    className="w-full px-6 py-5 rounded-4xl bg-white/5 border border-white/10 text-white font-sans focus:outline-none focus:border-white/30 transition-colors resize-none"
                   />
                 </div>
 

@@ -102,6 +102,6 @@ export const WEDDING_DATA = {
     phone: "6281547190395",
     whatsappMessage: "Halo, saya ingin membuat website undangan pernikahan mulai dari 100k"
   },
-  baseUrl: "https://template-06-indol.vercel.app/", // Alamat website undangan Anda
+  baseUrl: "https://template-06-indol.vercel.app", // Alamat website undangan Anda
   musicUrl: "https://www.bensound.com/bensound-music/bensound-love.mp3" 
 };

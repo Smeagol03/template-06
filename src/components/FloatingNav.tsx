@@ -1,5 +1,13 @@
 import { motion } from "framer-motion";
-import { House, Users, BookOpen, CalendarHeart, MapPin, Image, ChatCenteredDots } from "@phosphor-icons/react";
+import {
+  House,
+  Users,
+  BookOpen,
+  CalendarHeart,
+  MapPin,
+  Image,
+  ChatCenteredDots,
+} from "@phosphor-icons/react";
 
 const FloatingNav = () => {
   const navItems = [
@@ -20,8 +28,8 @@ const FloatingNav = () => {
   };
 
   return (
-    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] px-4 w-full max-w-fit">
-      <motion.nav 
+    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-100 px-4 w-full max-w-fit">
+      <motion.nav
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ type: "spring", stiffness: 260, damping: 20, delay: 1.5 }}
@@ -33,8 +41,12 @@ const FloatingNav = () => {
             onClick={() => scrollToSection(item.target)}
             className="group relative flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full text-white/40 hover:text-white transition-all duration-300"
           >
-            <item.icon size={20} weight="light" className="relative z-10 transition-transform duration-300 group-hover:scale-110" />
-            
+            <item.icon
+              size={20}
+              weight="light"
+              className="relative z-10 transition-transform duration-300 group-hover:scale-110"
+            />
+
             {/* Tooltip Label */}
             <span className="absolute -top-12 px-3 py-1.5 rounded-xl bg-white text-black text-[10px] font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none scale-90 group-hover:scale-100">
               {item.label}

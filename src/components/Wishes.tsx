@@ -125,13 +125,13 @@ const Wishes = () => {
             <div
               ref={scrollContainerRef}
               onScroll={handleScroll}
-              className="max-h-[600px] overflow-y-auto pr-4 custom-scrollbar"
+              className="max-h-150 overflow-y-auto pr-4 custom-scrollbar"
             >
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 {wishes.map((wish) => (
                   <div
                     key={wish.id}
-                    className="wish-card group relative p-6 rounded-[2rem] bg-white/[0.02] border border-white/5 hover:border-white/20 transition-all duration-500"
+                    className="wish-card group relative p-6 rounded-4xl bg-white/2 border border-white/5 hover:border-white/20 transition-all duration-500"
                   >
                     <div className="flex flex-col h-full">
                       <div className="flex items-center gap-3 mb-4">
@@ -150,7 +150,7 @@ const Wishes = () => {
                         </div>
                       </div>
 
-                      <p className="text-white/60 font-sans text-sm italic leading-relaxed flex-grow">
+                      <p className="text-white/60 font-sans text-sm italic leading-relaxed grow">
                         "{wish.message || "Selamat menempuh hidup baru!"}"
                       </p>
 
@@ -185,7 +185,7 @@ const Wishes = () => {
 
             {/* Gradient Overlay */}
             {hasMore && (
-              <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#0a0a0a] to-transparent pointer-events-none" />
+              <div className="absolute bottom-0 left-0 right-0 h-24 bg-linear-to-t from-[#0a0a0a] to-transparent pointer-events-none" />
             )}
           </div>
         )}

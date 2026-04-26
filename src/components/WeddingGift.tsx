@@ -61,14 +61,14 @@ const WeddingGift = () => {
 
         {/* Bank Card with Double Bezel Architecture */}
         <div className="gift-card relative group max-w-md mx-auto">
-          <div className="relative z-10 p-8 md:p-10 rounded-[2.5rem] bg-white/[0.03] border border-white/10 backdrop-blur-xl overflow-hidden flex flex-col items-center">
+          <div className="relative z-10 p-8 md:p-10 rounded-[2.5rem] bg-white/3 border border-white/10 backdrop-blur-xl overflow-hidden flex flex-col items-center">
             {/* Bank Badge */}
             <div className="px-4 py-1.5 rounded-full bg-white text-black font-sans text-[10px] font-bold tracking-widest uppercase mb-8">
               {WEDDING_DATA.links.weddingGift.bank}
             </div>
 
             <div className="space-y-2 mb-10">
-              <p className="font-sans text-2xl md:text-3xl text-white tracking-[0.1em] font-medium">
+              <p className="font-sans text-2xl md:text-3xl text-white tracking-widest font-medium">
                 {WEDDING_DATA.links.weddingGift.accountNumber}
               </p>
               <p className="font-sans text-xs uppercase tracking-[0.2em] text-white/40">
