@@ -22,6 +22,7 @@ const Closing = () => {
           repeat: -1,
           yoyo: true,
           ease: "sine.inOut",
+          force3D: true,
         },
       );
 
@@ -48,7 +49,7 @@ const Closing = () => {
     >
       {/* Colorful Background Photo */}
       <div
-        className="closing-bg absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+        className="closing-bg absolute inset-0 z-0 bg-cover bg-center bg-no-repeat will-change-transform"
         style={{
           backgroundImage: `url('${WEDDING_DATA.couple.groom.photo}')`,
           filter: "brightness(0.7) contrast(1.1)",

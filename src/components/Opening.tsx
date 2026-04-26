@@ -43,6 +43,7 @@ const Opening = ({ onOpen, isOpen }: OpeningProps) => {
           repeat: -1,
           yoyo: true,
           ease: "sine.inOut",
+          force3D: true,
         });
       }
     },
@@ -52,12 +53,12 @@ const Opening = ({ onOpen, isOpen }: OpeningProps) => {
   return (
     <section
       ref={containerRef}
-      className="relative h-dvh w-full flex flex-col items-center justify-between py-16 md:py-24 px-6 text-center overflow-hidden"
+      className="relative h-screen w-full flex flex-col items-center justify-between py-16 md:py-24 px-6 text-center overflow-hidden"
     >
       {/* Background Layer - Optimized for maximum photo visibility */}
       <div
         ref={bgRef}
-        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat will-change-transform"
         style={{
           backgroundImage: `url('${WEDDING_DATA.couple.bride.photo}')`,
           filter: "brightness(0.75) contrast(1.05)",

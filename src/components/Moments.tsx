@@ -40,7 +40,7 @@ const Moments = () => {
   return (
     <section 
       ref={containerRef}
-      className="relative min-h-[80dvh] flex items-center justify-center px-6 bg-[#0a0a0a] overflow-hidden py-32"
+      className="relative min-h-[80vh] flex items-center justify-center px-6 bg-[#0a0a0a] overflow-hidden py-32"
     >
       {/* Background Image using Couple Photo from WEDDING_DATA */}
       <div 
