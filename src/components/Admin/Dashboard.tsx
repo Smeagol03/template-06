@@ -291,9 +291,7 @@ ${WEDDING_DATA.couple.groom.name.split(' ')[0]} & ${WEDDING_DATA.couple.bride.na
                     }}
                     className="w-full py-5 rounded-full bg-emerald-500 text-white font-sans text-sm font-bold tracking-widest uppercase hover:bg-emerald-400 transition-all flex items-center justify-center gap-3"
                   >
-                    <WhatsappLogo size={20} weight="fill" />
-                    Share Template to WhatsApp
-                  </button>
+                    <WhatsappLogo size={20} weight="fill" />Bagikan</button>
                 </div>
               </div>
               
