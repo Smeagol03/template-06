@@ -102,5 +102,6 @@ export const WEDDING_DATA = {
     phone: "6281547190395",
     whatsappMessage: "Halo, saya ingin membuat website undangan pernikahan mulai dari 100k"
   },
-  musicUrl: "https://www.bensound.com/bensound-music/bensound-love.mp3" // Premium instrumental track
+  baseUrl: "https://wedding03-ff818.web.app", // Alamat website undangan Anda
+  musicUrl: "https://www.bensound.com/bensound-music/bensound-love.mp3" 
 };

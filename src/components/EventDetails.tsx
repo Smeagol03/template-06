@@ -101,7 +101,7 @@ const EventDetails = () => {
           
           <div className="flex items-center gap-4 md:gap-6 pb-2">
             <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/20 flex items-center justify-center">
-              <CalendarBlank size={18} className="md:size-5" weight="light" className="text-white" />
+              <CalendarBlank size={18} className="md:size-5 text-white" weight="light" />
             </div>
             <div className="h-[1px] w-8 md:w-12 bg-white/20" />
             <p className="font-sans text-base md:text-xl text-white/80 tracking-widest uppercase italic">

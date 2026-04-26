@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -15,15 +16,15 @@ interface OpeningProps {
 const Opening = ({ onOpen, isOpen }: OpeningProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
+  const [searchParams] = useSearchParams();
   const [guestName, setGuestName] = useState("Bapak/Ibu/Saudara/i");
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const to = params.get("to");
+    const to = searchParams.get("to");
     if (to) {
-      setGuestName(decodeURIComponent(to));
+      setGuestName(to);
     }
-  }, []);
+  }, [searchParams]);
 
   useGSAP(
     () => {
