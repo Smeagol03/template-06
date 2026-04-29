@@ -30,12 +30,14 @@ const Opening = ({ onOpen, isOpen }: OpeningProps) => {
     () => {
       const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
 
+      // Hero Text reveal
       tl.fromTo(
         ".hero-text",
         { y: 30, opacity: 0 },
         { y: 0, opacity: 1, duration: 2, stagger: 0.2, delay: 0.5 },
       );
 
+      // Background Ken-Burns Effect
       if (bgRef.current) {
         gsap.to(bgRef.current, {
           scale: 1.05,

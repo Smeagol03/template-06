@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import Opening from "../components/Opening";
+import Salam from "../components/Salam";
 import Couple from "../components/Couple";
 import LoveStory from "../components/LoveStory";
 import EventDetails from "../components/EventDetails";
@@ -27,9 +28,9 @@ const Invitation = () => {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "auto";
-      const coupleSection = document.getElementById("couple");
-      if (coupleSection) {
-        coupleSection.scrollIntoView({ behavior: "smooth" });
+      const salamSection = document.getElementById("salam");
+      if (salamSection) {
+        salamSection.scrollIntoView({ behavior: "smooth" });
       }
       if (audioRef.current) {
         audioRef.current.play().catch(err => console.log("Audio play blocked:", err));
@@ -57,6 +58,9 @@ const Invitation = () => {
       <section id="opening">
         <Opening onOpen={() => setIsOpen(true)} isOpen={isOpen} />
       </section>
+
+      {/* Salam Section */}
+      {isOpen && <Salam />}
 
       {/* 2. Couple Section */}
       <section id="couple">
