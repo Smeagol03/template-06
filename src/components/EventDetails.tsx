@@ -1,50 +1,11 @@
 import { useRef } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { MapPin, Clock, CalendarBlank, Heart, Sparkle } from "@phosphor-icons/react";
+import { motion } from "framer-motion";
+import { MapPin, Clock, CalendarBlank, Heart } from "@phosphor-icons/react";
 import { WEDDING_DATA } from "../constants/data";
 import kananAtas from "../assets/dekoratif/kanan-atas.png";
 
-const FallingParticle = ({ i }: { i: number }) => {
-  // Random horizontal position and size
-  const left = `${(i * 13.7) % 100}%`;
-  const size = i % 3 === 0 ? '3px' : '1.5px';
-  
-  // Random duration and delay for organic feel
-  const duration = 15 + (i % 10);
-  const delay = -(i * 2); // Start at different positions in the cycle
-
-  return (
-    <motion.div
-      initial={{ y: "-10vh", opacity: 0 }}
-      animate={{ 
-        y: "110vh",
-        opacity: [0, 0.4, 0.4, 0],
-        x: [0, i % 2 === 0 ? 20 : -20, 0] // Subtle horizontal sway
-      }}
-      transition={{ 
-        duration, 
-        delay, 
-        repeat: Infinity, 
-        ease: "linear",
-      }}
-      className="absolute pointer-events-none z-0"
-      style={{ left }}
-    >
-      <div 
-        className="bg-white rounded-full blur-[0.5px]" 
-        style={{ width: size, height: size }} 
-      />
-    </motion.div>
-  );
-};
-
 const EventDetails = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  // Keep scroll progress for other elements if needed, but particles are now independent
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  });
 
   const EventCard = ({
     title,
@@ -138,11 +99,6 @@ const EventDetails = () => {
       ref={containerRef}
       className="relative py-24 md:py-48 px-6 bg-[#0a0a0a] overflow-hidden"
     >
-      {/* Falling Star Particles */}
-      {[...Array(25)].map((_, i) => (
-        <FallingParticle key={i} i={i} />
-      ))}
-
       {/* Decorative Floral Corners */}
       <img
         src={kananAtas}
