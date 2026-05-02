@@ -1,8 +1,7 @@
 import { useRef } from "react";
 import { motion } from "framer-motion";
-import { MapPin, Clock, CalendarBlank, Heart } from "@phosphor-icons/react";
+import { MapPin, Clock, CalendarBlank, Heart, ArrowUpRight } from "@phosphor-icons/react";
 import { WEDDING_DATA } from "../constants/data";
-import kananAtas from "../assets/dekoratif/kanan-atas.png";
 
 const EventDetails = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -10,12 +9,10 @@ const EventDetails = () => {
   const EventCard = ({
     title,
     data,
-    iconColor,
     index,
   }: {
     title: string;
     data: any;
-    iconColor: string;
     index: number;
   }) => (
     <motion.div
@@ -25,72 +22,77 @@ const EventDetails = () => {
       transition={{
         duration: 1.2,
         delay: index * 0.2,
-        ease: [0.16, 1, 0.3, 1],
+        ease: [0.32, 0.72, 0, 1],
       }}
-      className="event-card group relative h-full"
+      className="group relative h-full"
     >
-      {/* Double Bezel Architecture */}
-      <div className="relative z-10 p-6 md:p-12 rounded-[2rem] md:rounded-[2.5rem] bg-white/[0.03] border border-white/10 backdrop-blur-sm overflow-hidden h-full flex flex-col transition-transform duration-500 group-hover:-translate-y-2">
-        {/* Subtle Inner Highlight */}
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-
-        <h3 className="font-serif text-2xl md:text-4xl text-white mb-6 md:mb-8 italic">
-          {title}
-        </h3>
-
-        <div className="space-y-6 md:space-y-8 flex-grow">
-          <div className="flex gap-4">
-            <div
-              className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center bg-white/5 text-${iconColor}`}
-            >
-              <Clock size={18} className="md:size-5" weight="light" />
+      {/* DOUBLE-BEZEL ARCHITECTURE */}
+      {/* 1. Outer Shell */}
+      <div className="p-2 md:p-3 bg-white/5 rounded-[3rem] md:rounded-[4rem] border border-white/10 backdrop-blur-md shadow-2xl h-full transition-all duration-700 group-hover:scale-[1.01] group-hover:bg-white/10">
+        
+        {/* 2. Inner Core */}
+        <div className="relative h-full p-8 md:p-12 rounded-[calc(3rem-0.5rem)] md:rounded-[calc(4rem-0.75rem)] bg-zinc-950/40 border border-white/5 overflow-hidden flex flex-col justify-between">
+          
+          {/* Subtle Inner Highlight (Machined Edge effect) */}
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+          
+          <div>
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
+                <Heart size={20} weight="light" className="text-white/60" />
+              </div>
+              <div className="h-px w-8 bg-white/20" />
+              <span className="text-[10px] uppercase tracking-[0.4em] text-white/40">Archive 0{index + 1}</span>
             </div>
-            <div>
-              <p className="text-[9px] uppercase tracking-[0.2em] text-white/40 mb-1">
-                Time
-              </p>
-              <p className="text-white font-sans text-sm md:text-base tracking-wide">
-                {data.time}
-              </p>
+
+            <h3 className="font-serif text-3xl md:text-5xl text-white mb-10 leading-none">
+              {title}<span className="text-white/20 italic">.</span>
+            </h3>
+
+            <div className="space-y-10">
+              <div className="flex gap-6">
+                <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 shrink-0">
+                  <Clock size={24} weight="light" className="text-white/60" />
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-white/30 mb-2">Timing</p>
+                  <p className="text-white font-sans text-lg md:text-xl tracking-tight leading-none italic">
+                    {data.time}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-6">
+                <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 shrink-0">
+                  <MapPin size={24} weight="light" className="text-white/60" />
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-white/30 mb-2">Location</p>
+                  <p className="text-white font-sans text-lg md:text-xl tracking-tight leading-none mb-4">
+                    {data.venue}
+                  </p>
+                  <p className="text-xs md:text-sm text-white/40 leading-relaxed max-w-[280px]">
+                    {data.address}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="flex gap-4">
-            <div
-              className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center bg-white/5 text-${iconColor}`}
-            >
-              <MapPin size={18} className="md:size-5" weight="light" />
+          {/* BUTTON-IN-BUTTON CTA */}
+          <a
+            href={data.maps}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-12 group/btn relative inline-flex items-center justify-between pl-8 pr-2 py-2 rounded-full bg-white text-black transition-all duration-500 hover:scale-[1.02] active:scale-[0.98]"
+          >
+            <span className="font-sans text-xs md:text-sm font-bold uppercase tracking-widest">Get Directions</span>
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-black flex items-center justify-center transition-transform duration-500 group-hover/btn:rotate-45">
+              <ArrowUpRight size={20} weight="bold" className="text-white" />
             </div>
-            <div>
-              <p className="text-[9px] uppercase tracking-[0.2em] text-white/40 mb-1">
-                Venue
-              </p>
-              <p className="text-white font-sans text-sm md:text-base tracking-wide mb-1 md:mb-2">
-                {data.venue}
-              </p>
-              <p className="text-[11px] md:text-xs text-white/50 leading-relaxed max-w-[250px]">
-                {data.address}
-              </p>
-            </div>
-          </div>
+          </a>
         </div>
-
-        {/* CTA Button */}
-        <a
-          href={data.maps}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-10 md:mt-12 inline-flex items-center justify-between w-full px-5 py-4 rounded-full bg-white text-black font-sans text-xs md:text-sm font-medium transition-all duration-300 hover:bg-white/90 group/btn"
-        >
-          <span>View on Google Maps</span>
-          <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-black/5 flex items-center justify-center transition-transform duration-300 group-hover/btn:translate-x-1">
-            <MapPin size={14} className="md:size-4" weight="fill" />
-          </div>
-        </a>
       </div>
-
-      {/* Outer Glow/Shadow Shell */}
-      <div className="absolute -inset-2 bg-gradient-to-b from-white/5 to-transparent rounded-[2.5rem] md:rounded-[3rem] -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
     </motion.div>
   );
 
@@ -99,27 +101,9 @@ const EventDetails = () => {
       ref={containerRef}
       className="relative py-24 md:py-48 px-6 bg-[#0a0a0a] overflow-hidden"
     >
-      {/* Decorative Floral Corners */}
-      <img
-        src={kananAtas}
-        alt="deco"
-        className="absolute top-0 right-0 w-28 md:w-80 opacity-20 pointer-events-none z-0"
-      />
-      <img
-        src={kananAtas}
-        alt="deco"
-        className="absolute top-0 left-0 w-28 md:w-80 opacity-20 pointer-events-none z-0 -scale-x-100"
-      />
-      <img
-        src={kananAtas}
-        alt="deco"
-        className="absolute bottom-0 right-0 w-28 md:w-80 opacity-20 pointer-events-none z-0 -scale-y-100"
-      />
-      <img
-        src={kananAtas}
-        alt="deco"
-        className="absolute bottom-0 left-0 w-28 md:w-80 opacity-20 pointer-events-none z-0 -scale-x-100 -scale-y-100"
-      />
+      {/* Ambient Radial Gradients */}
+      <div className="absolute top-0 right-0 w-[50vw] h-[50vw] bg-white/5 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2" />
+      <div className="absolute bottom-0 left-0 w-[50vw] h-[50vw] bg-white/5 blur-[120px] rounded-full translate-y-1/2 -translate-x-1/2" />
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header Block */}
@@ -128,92 +112,60 @@ const EventDetails = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 md:mb-24"
+          className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-20 md:mb-32"
         >
-          <div className="max-w-2xl">
-            <span className="text-[9px] md:text-[10px] uppercase tracking-[0.4em] text-white/50 mb-4 block">
-              The Celebration
-            </span>
-            <h2 className="font-serif text-3xl md:text-7xl text-white leading-tight">
-              Event <br className="hidden md:block" /> Details
+          <div className="max-w-3xl">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-12 h-px bg-white/20" />
+              <span className="text-[10px] uppercase tracking-[0.5em] text-white/40">
+                The Celebration
+              </span>
+            </div>
+            <h2 className="font-serif text-5xl md:text-8xl text-white leading-[0.9]">
+              Wedding <br /> <span className="italic text-white/30">Itinerary</span>
             </h2>
           </div>
 
-          <div className="flex items-center gap-4 md:gap-6 pb-2">
-            <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/20 flex items-center justify-center">
-              <CalendarBlank
-                size={18}
-                className="md:size-5 text-white"
-                weight="light"
-              />
-            </div>
-            <div className="h-[1px] w-8 md:w-12 bg-white/20" />
-            <p className="font-sans text-base md:text-xl text-white/80 tracking-widest uppercase italic">
-              {WEDDING_DATA.event.dateFormatted}
-            </p>
-          </div>
-        </motion.div>
-
-        {/* Central Couple Photo Section */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-          className="relative mb-24 md:mb-32"
-        >
-          <div className="relative mx-auto w-full max-w-4xl aspect-[16/9] rounded-[2.5rem] md:rounded-[4rem] overflow-hidden border border-white/10 group">
-            <img
-              src={WEDDING_DATA.gallery[1].url}
-              alt="Couple"
-              className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-center w-full px-6">
-              <Heart
-                size={24}
-                weight="fill"
-                className="text-white/40 mx-auto mb-4"
-              />
-              <p className="font-serif text-xl md:text-3xl text-white italic tracking-wide">
-                Save the Date for Our Big Day
+          <div className="flex flex-col items-start md:items-end gap-4">
+             <div className="px-4 py-2 rounded-full border border-white/20 flex items-center gap-3">
+              <CalendarBlank size={16} className="text-white/60" />
+              <p className="font-mono text-xs text-white/80 tracking-widest uppercase">
+                {WEDDING_DATA.event.dateFormatted}
               </p>
             </div>
+            <p className="text-[10px] text-white/30 uppercase tracking-[0.3em]">Save the date for our big day</p>
           </div>
-          {/* Decorative frame elements */}
-          <div className="absolute -inset-4 md:-inset-6 border border-white/5 rounded-[3rem] md:rounded-[5rem] -z-10" />
         </motion.div>
 
         {/* Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16">
           <EventCard
             title="Holy Matrimony"
             data={WEDDING_DATA.event.akad}
-            iconColor="white"
             index={0}
           />
           <EventCard
             title="Wedding Reception"
             data={WEDDING_DATA.event.resepsi}
-            iconColor="white"
             index={1}
           />
         </div>
 
-        {/* Bottom Banner/Note */}
+        {/* Quote Section */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 1.5, delay: 0.5 }}
-          className="mt-16 md:mt-24 p-6 md:p-8 rounded-[2rem] md:rounded-4xl border border-white/5 bg-white/[0.01] text-center max-w-3xl mx-auto"
+          transition={{ duration: 2, delay: 0.5 }}
+          className="mt-32 md:mt-48 text-center max-w-4xl mx-auto"
         >
-          <p className="font-serif italic text-base md:text-lg text-white/40 leading-relaxed">
+          <div className="w-px h-24 bg-gradient-to-b from-white/20 to-transparent mx-auto mb-12" />
+          <p className="font-serif italic text-xl md:text-3xl text-white/40 leading-relaxed">
             "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan
             untukmu isteri-isteri dari jenismu sendiri, supaya kamu cenderung
             dan merasa tenteram kepadanya..."
           </p>
+          <div className="mt-8 text-[10px] uppercase tracking-[0.5em] text-white/20">Ar-Rum 21</div>
         </motion.div>
       </div>
     </section>
@@ -221,3 +173,4 @@ const EventDetails = () => {
 };
 
 export default EventDetails;
+

@@ -33,7 +33,7 @@ const FloatingIcon = ({ i, scrollYProgress }: { i: number; scrollYProgress: any 
   );
 };
 
-const Location = () => {
+const Location = ({ id }: { id?: string }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -42,9 +42,11 @@ const Location = () => {
 
   return (
     <section
+      id={id}
       ref={containerRef}
       className="relative py-24 md:py-48 px-6 bg-[#0a0a0a] overflow-hidden"
     >
+
       {/* Decorative Floating Icons */}
       {[...Array(4)].map((_, i) => (
         <FloatingIcon key={i} i={i} scrollYProgress={scrollYProgress} />

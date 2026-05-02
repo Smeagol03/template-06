@@ -81,17 +81,14 @@ const Invitation = () => {
       <Countdown />
 
       {/* 6. Location & Maps Section */}
-      <section id="location" className="py-12 md:py-24">
-        <Location />
-      </section>
+      <Location id="location" />
 
       {/* 7. Live Streaming Section */}
-      <LiveStreaming />
+      <LiveStreaming id="streaming" />
 
       {/* 8. Gallery Section */}
-      <section id="gallery">
-        <Gallery />
-      </section>
+      <Gallery id="gallery" />
+
 
       {/* 9. Wedding Gift Section */}
       <WeddingGift />

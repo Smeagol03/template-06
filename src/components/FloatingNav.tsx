@@ -1,24 +1,53 @@
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   House,
   Users,
   BookOpen,
   CalendarHeart,
   MapPin,
-  Image,
+  Broadcast,
+  Image as ImageIcon,
   ChatCenteredDots,
 } from "@phosphor-icons/react";
 
 const FloatingNav = () => {
+  const [activeSection, setActiveSection] = useState("opening");
+
   const navItems = [
     { icon: House, label: "Home", target: "opening" },
     { icon: Users, label: "Couple", target: "couple" },
     { icon: BookOpen, label: "Story", target: "story" },
     { icon: CalendarHeart, label: "Event", target: "event" },
     { icon: MapPin, label: "Maps", target: "location" },
-    { icon: Image, label: "Gallery", target: "gallery" },
+    { icon: ImageIcon, label: "Gallery", target: "gallery" },
     { icon: ChatCenteredDots, label: "RSVP", target: "rsvp" },
   ];
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = navItems.map(item => item.target);
+      
+      // Find current section with a more robust threshold
+      const current = sections.find(section => {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          // Adjust threshold for mobile and pinning sections
+          return rect.top <= 150 && rect.bottom >= 150;
+        }
+        return false;
+      });
+
+      if (current && current !== activeSection) {
+        setActiveSection(current);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [activeSection]);
+
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -28,39 +57,46 @@ const FloatingNav = () => {
   };
 
   return (
-    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-100 px-4 w-full max-w-fit">
+    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] px-4 w-full max-w-fit pointer-events-none">
       <motion.nav
+        layout
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ type: "spring", stiffness: 260, damping: 20, delay: 1.5 }}
-        className="flex items-center gap-1 p-2 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 shadow-2xl"
+        className="pointer-events-auto flex items-center gap-1.5 p-1.5 rounded-full bg-black/80 backdrop-blur-2xl border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
       >
-        {navItems.map((item, index) => (
-          <button
-            key={index}
-            onClick={() => scrollToSection(item.target)}
-            className="group relative flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full text-white/40 hover:text-white transition-all duration-300"
-          >
-            <item.icon
-              size={20}
-              weight="light"
-              className="relative z-10 transition-transform duration-300 group-hover:scale-110"
-            />
+        {navItems.map((item, index) => {
+          const isActive = activeSection === item.target;
+          
+          return (
+            <button
+              key={index}
+              onClick={() => scrollToSection(item.target)}
+              className={`relative flex items-center justify-center transition-all duration-500 rounded-full h-11 w-11
+                ${isActive ? "bg-white text-black" : "text-white/40 hover:text-white hover:bg-white/5"}
+              `}
+            >
+              <item.icon
+                size={20}
+                weight={isActive ? "fill" : "light"}
+                className="transition-colors duration-500"
+              />
 
-            {/* Tooltip Label */}
-            <span className="absolute -top-12 px-3 py-1.5 rounded-xl bg-white text-black text-[10px] font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none scale-90 group-hover:scale-100">
-              {item.label}
-              {/* Tooltip Arrow */}
-              <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-white rotate-45" />
-            </span>
-
-            {/* Hover Background */}
-            <div className="absolute inset-0 rounded-full bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </button>
-        ))}
+              {/* Active Indicator Background (Shared Layout) */}
+              {isActive && (
+                <motion.div
+                  layoutId="nav-active-bg"
+                  className="absolute inset-0 rounded-full bg-white z-[-1]"
+                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                />
+              )}
+            </button>
+          );
+        })}
       </motion.nav>
     </div>
   );
 };
 
+
 export default FloatingNav;
+

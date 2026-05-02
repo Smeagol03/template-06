@@ -1,113 +1,98 @@
 import { useState, useRef } from "react";
-import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { X, ArrowsOutSimple, Camera, Image as ImageIcon, Aperture } from "@phosphor-icons/react";
 import { WEDDING_DATA } from "../constants/data";
 
-const FloatingIcon = ({ i, scrollYProgress }: { i: number; scrollYProgress: any }) => {
-  const Icons = [Camera, ImageIcon, Aperture];
-  const Icon = Icons[i % Icons.length];
-  
-  const y = useTransform(scrollYProgress, [0, 1], [0, -(150 + i * 40)]);
-  const rotate = useTransform(scrollYProgress, [0, 1], [0, i % 2 === 0 ? 45 : -45]);
-  const smoothY = useSpring(y, { stiffness: 40, damping: 25 });
-
-  const positions = [
-    { top: '5%', left: '10%' },
-    { top: '15%', left: '85%' },
-    { top: '65%', left: '5%' },
-    { top: '85%', left: '90%' },
-    { top: '45%', left: '45%' },
-    { top: '25%', left: '15%' },
-  ];
-
-  return (
-    <motion.div
-      style={{
-        y: smoothY,
-        rotate,
-        top: positions[i % positions.length].top,
-        left: positions[i % positions.length].left,
-        opacity: 0.05 + (i * 0.01),
-      }}
-      className="absolute text-white pointer-events-none z-20"
-    >
-      <Icon size={25 + (i * 15)} weight="light" />
-    </motion.div>
-  );
-};
-
-const Gallery = () => {
+const Gallery = ({ id }: { id?: string }) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  });
 
   return (
     <section
-      ref={containerRef}
-      className="relative py-24 md:py-48 px-6 bg-[#0a0a0a] overflow-hidden"
+      id={id}
+      className="relative bg-[#0a0a0a] overflow-hidden py-24 md:py-48"
     >
-      {/* Decorative Floating Icons */}
-      {[...Array(6)].map((_, i) => (
-        <FloatingIcon key={i} i={i} scrollYProgress={scrollYProgress} />
+      {/* Decorative Floating Icons (Static in this version) */}
+      {[Camera, ImageIcon, Aperture].map((Icon, i) => (
+        <div
+          key={i}
+          className="absolute text-white/5 pointer-events-none z-0"
+          style={{
+            top: `${10 + i * 35}%`,
+            left: i % 2 === 0 ? "2%" : "92%",
+            transform: `rotate(${i * 45}deg)`,
+          }}
+        >
+          <Icon size={60 + i * 40} weight="light" />
+        </div>
       ))}
 
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="relative z-10">
         {/* Header Block */}
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center mb-24 md:mb-32"
-        >
-          <span className="text-[10px] uppercase tracking-[0.5em] text-white/30 mb-4 block">
-            Visual Memories
-          </span>
-          <h2 className="font-serif text-4xl md:text-7xl text-white">
-            Our Gallery
+        <div className="max-w-7xl mx-auto px-6 mb-16 md:mb-24">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-12 h-px bg-white/20" />
+            <span className="text-[10px] uppercase tracking-[0.5em] text-white/40">
+              Visual Memories
+            </span>
+          </div>
+          <h2 className="font-serif text-5xl md:text-8xl text-white leading-none">
+            Our <span className="italic text-white/30">Gallery</span>
           </h2>
-        </motion.div>
+        </div>
 
-        {/* Bento Grid Gallery */}
-        <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[200px] md:auto-rows-[250px] gap-4 md:gap-8 grid-flow-dense">
-          {WEDDING_DATA.gallery.map((item, index) => {
-            const isPortrait = item.type === "portrait";
-            const isLandscape = item.type === "landscape";
-
-            return (
+        {/* Manual Horizontal Scroll Container */}
+        <div className="relative w-full overflow-x-auto overflow-y-hidden no-scrollbar cursor-grab active:cursor-grabbing">
+          <div className="flex gap-6 md:gap-12 px-6 md:px-[10vw] pb-12">
+            {WEDDING_DATA.gallery.map((item, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 1.2, delay: (index % 4) * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                className={`gallery-item relative group cursor-pointer overflow-hidden rounded-[2.5rem] md:rounded-[3rem] 
-                  ${isPortrait ? "row-span-2" : "row-span-1"}
-                  ${isLandscape ? "md:col-span-2 col-span-2" : "col-span-1"}
-                `}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: index * 0.1 }}
+                className="relative shrink-0 group"
                 onClick={() => setSelectedImage(item.url)}
-                whileHover={{ scale: 0.98 }}
               >
-                <div className="relative w-full h-full overflow-hidden rounded-[2.5rem] md:rounded-[3rem] bg-white/5 border border-white/10">
-                  <img
-                    src={item.url}
-                    alt={`Gallery ${index}`}
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110"
-                  />
+                {/* Double-Bezel Architecture */}
+                <div className="p-2 md:p-3 bg-white/5 rounded-[2.5rem] md:rounded-[4rem] border border-white/10 backdrop-blur-sm transition-all duration-700 group-hover:scale-[1.02] group-hover:bg-white/10">
+                  <div className="relative overflow-hidden rounded-[2rem] md:rounded-[3.2rem] bg-zinc-900 aspect-[4/5] md:aspect-[3/4] h-[50vh] md:h-[65vh]">
+                    <img
+                      src={item.url}
+                      alt={`Gallery ${index}`}
+                      className="w-full h-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-110"
+                      loading="lazy"
+                    />
 
-                  {/* Overlay on Hover */}
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-                    <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 scale-90 group-hover:scale-100 transition-transform duration-500">
-                      <ArrowsOutSimple size={20} className="text-white" />
+                    {/* Overlay on Hover */}
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                      <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 scale-90 group-hover:scale-100 transition-transform duration-500">
+                        <ArrowsOutSimple size={24} className="text-white" />
+                      </div>
                     </div>
                   </div>
                 </div>
+                
+                {/* Metadata */}
+                <div className="mt-6 px-4 flex items-center justify-between opacity-40">
+                  <span className="font-mono text-[10px] uppercase tracking-widest">
+                    {(index + 1).toString().padStart(2, '0')}
+                  </span>
+                  <div className="w-8 h-px bg-white/20" />
+                </div>
               </motion.div>
-            );
-          })}
+            ))}
+            
+            {/* End Space */}
+            <div className="shrink-0 w-[5vw] md:w-[10vw]" />
+          </div>
+        </div>
+
+        {/* Hint for Scroll */}
+        <div className="max-w-7xl mx-auto px-6 mt-8 flex justify-end">
+          <div className="flex items-center gap-4 text-white/20">
+            <span className="text-[9px] uppercase tracking-[0.3em]">Swipe to explore</span>
+            <div className="w-12 h-px bg-white/10" />
+          </div>
         </div>
       </div>
 
@@ -118,20 +103,18 @@ const Gallery = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-100 flex items-center justify-center p-4 md:p-12 bg-black/95 backdrop-blur-xl"
+            className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-12 bg-black/95 backdrop-blur-xl"
             onClick={() => setSelectedImage(null)}
           >
-            {/* Close Button */}
             <motion.button
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="absolute top-8 right-8 w-14 h-14 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white z-110 hover:bg-white hover:text-black transition-all duration-300"
+              className="absolute top-6 right-6 md:top-8 md:right-8 w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white z-[210] hover:bg-white hover:text-black transition-all duration-300"
               onClick={() => setSelectedImage(null)}
             >
-              <X size={28} weight="light" />
+              <X size={24} weight="light" />
             </motion.button>
 
-            {/* Image Container */}
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -143,7 +126,7 @@ const Gallery = () => {
               <img
                 src={selectedImage}
                 alt="Selected"
-                className="max-w-full max-h-full object-contain rounded-3xl shadow-2xl border border-white/10"
+                className="max-w-full max-h-full object-contain rounded-2xl md:rounded-3xl shadow-2xl border border-white/10"
               />
             </motion.div>
           </motion.div>

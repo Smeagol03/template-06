@@ -7,7 +7,7 @@ import { WEDDING_DATA } from "../constants/data";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const LiveStreaming = () => {
+const LiveStreaming = ({ id }: { id?: string }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -28,9 +28,11 @@ const LiveStreaming = () => {
 
   return (
     <section
+      id={id}
       ref={containerRef}
       className="relative py-24 md:py-32 px-6 bg-[#0a0a0a]"
     >
+
       <div className="max-w-5xl mx-auto">
         <div className="stream-card relative group">
           {/* Main Container */}
