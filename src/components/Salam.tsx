@@ -1,5 +1,6 @@
 import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, AnimatePresence } from "framer-motion";
+import { Sparkle } from "@phosphor-icons/react";
 import { WEDDING_DATA } from "../constants/data";
 import WeddingCake from "./WeddingCake";
 
@@ -49,7 +50,127 @@ const Salam = () => {
               className="w-full h-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-105"
             />
             {/* Dark wash for premium feel */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-40" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-40 z-0" />
+
+            {/* Magical Sparkles Overlay */}
+            <AnimatePresence>
+              {isInView && (
+                <>
+                  {/* Sparkle 1: Top Right */}
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0, y: 10 }}
+                    animate={{
+                      opacity: [0, 1, 0],
+                      scale: [0, 1.2, 0],
+                      y: -40,
+                      x: 15,
+                      rotate: 180,
+                    }}
+                    transition={{ duration: 3.5, repeat: Infinity, delay: 1.2 }}
+                    className="absolute top-[15%] right-[20%] text-white z-10 pointer-events-none"
+                  >
+                    <Sparkle
+                      size={24}
+                      weight="fill"
+                      filter="drop-shadow(0 0 8px rgba(255,255,255,1))"
+                    />
+                  </motion.div>
+                  {/* Sparkle 2: Bottom Left */}
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0, y: 5 }}
+                    animate={{
+                      opacity: [0, 0.9, 0],
+                      scale: [0, 1.1, 0],
+                      y: -30,
+                      x: -15,
+                      rotate: -180,
+                    }}
+                    transition={{ duration: 4, repeat: Infinity, delay: 2.0 }}
+                    className="absolute bottom-[20%] left-[25%] text-white z-10 pointer-events-none"
+                  >
+                    <Sparkle
+                      size={18}
+                      weight="fill"
+                      filter="drop-shadow(0 0 6px rgba(255,255,255,0.9))"
+                    />
+                  </motion.div>
+                  {/* Sparkle 3: Mid Left */}
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0, y: 10 }}
+                    animate={{
+                      opacity: [0, 0.8, 0],
+                      scale: [0, 1, 0],
+                      y: -25,
+                      rotate: 90,
+                    }}
+                    transition={{ duration: 3, repeat: Infinity, delay: 2.6 }}
+                    className="absolute top-[45%] left-[15%] text-white z-10 pointer-events-none"
+                  >
+                    <Sparkle
+                      size={14}
+                      weight="fill"
+                      filter="drop-shadow(0 0 5px rgba(255,255,255,0.8))"
+                    />
+                  </motion.div>
+                  {/* Sparkle 4: Bottom Right */}
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0, y: 15 }}
+                    animate={{
+                      opacity: [0, 1, 0],
+                      scale: [0, 1.1, 0],
+                      y: -35,
+                      rotate: 120,
+                    }}
+                    transition={{ duration: 4.5, repeat: Infinity, delay: 1.8 }}
+                    className="absolute bottom-[35%] right-[15%] text-white z-10 pointer-events-none"
+                  >
+                    <Sparkle
+                      size={20}
+                      weight="fill"
+                      filter="drop-shadow(0 0 8px rgba(255,255,255,0.9))"
+                    />
+                  </motion.div>
+                  {/* Sparkle 5: Top Left */}
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0, y: 20 }}
+                    animate={{
+                      opacity: [0, 0.9, 0],
+                      scale: [0, 1, 0],
+                      y: -45,
+                      x: 5,
+                      rotate: -90,
+                    }}
+                    transition={{ duration: 3.8, repeat: Infinity, delay: 2.4 }}
+                    className="absolute top-[25%] left-[35%] text-white z-10 pointer-events-none"
+                  >
+                    <Sparkle
+                      size={16}
+                      weight="fill"
+                      filter="drop-shadow(0 0 6px rgba(255,255,255,0.8))"
+                    />
+                  </motion.div>
+                  {/* Sparkle 6: Mid Right */}
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0, y: 5 }}
+                    animate={{
+                      opacity: [0, 0.85, 0],
+                      scale: [0, 1.1, 0],
+                      y: -20,
+                      x: -10,
+                      rotate: 45,
+                    }}
+                    transition={{ duration: 4.2, repeat: Infinity, delay: 3.1 }}
+                    className="absolute top-[55%] right-[30%] text-white z-10 pointer-events-none"
+                  >
+                    <Sparkle
+                      size={18}
+                      weight="fill"
+                      filter="drop-shadow(0 0 6px rgba(255,255,255,0.9))"
+                    />
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </motion.div>
@@ -63,7 +184,6 @@ const Salam = () => {
         transition={{ duration: 2, delay: 1.8, ease: "easeOut" }}
         className="relative"
       >
-        <div className="w-px h-16 bg-gradient-to-b from-white/20 to-transparent mx-auto mb-10" />
         <p className="font-serif text-xl md:text-3xl text-white/40 max-w-3xl px-6 leading-relaxed italic">
           "{WEDDING_DATA.quotes.text}"
         </p>

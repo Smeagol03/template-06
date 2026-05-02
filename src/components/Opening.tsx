@@ -1,12 +1,9 @@
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { EnvelopeOpen } from "@phosphor-icons/react";
+import { motion, AnimatePresence } from "framer-motion";
+import type { Variants } from "framer-motion";
+import { ArrowRight } from "@phosphor-icons/react";
 import { WEDDING_DATA } from "../constants/data";
-
-gsap.registerPlugin(ScrollTrigger);
 
 interface OpeningProps {
   onOpen: () => void;
@@ -14,8 +11,6 @@ interface OpeningProps {
 }
 
 const Opening = ({ onOpen, isOpen }: OpeningProps) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const bgRef = useRef<HTMLDivElement>(null);
   const [searchParams] = useSearchParams();
   const [guestName, setGuestName] = useState("Bapak/Ibu/Saudara/i");
 
@@ -26,86 +21,135 @@ const Opening = ({ onOpen, isOpen }: OpeningProps) => {
     }
   }, [searchParams]);
 
-  useGSAP(
-    () => {
-      const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
-
-      // Hero Text reveal
-      tl.fromTo(
-        ".hero-text",
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 2, stagger: 0.2, delay: 0.5 },
-      );
-
-      // Background Ken-Burns Effect
-      if (bgRef.current) {
-        gsap.to(bgRef.current, {
-          scale: 1.05,
-          duration: 25,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-          force3D: true,
-        });
-      }
+  // Framer Motion staggered animation variants
+  const stagger: Variants = {
+    animate: {
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.3,
+      },
     },
-    { scope: containerRef }
-  );
+  };
+
+  const fadeInUp: Variants = {
+    initial: { y: 30, opacity: 0 },
+    animate: {
+      y: 0,
+      opacity: 1,
+      transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] },
+    },
+  };
 
   return (
-    <section
-      ref={containerRef}
-      className="relative h-screen w-full flex flex-col items-center justify-between py-16 md:py-24 px-6 text-center overflow-hidden"
-    >
-      {/* Background Layer - Optimized for maximum photo visibility */}
-      <div
-        ref={bgRef}
-        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat will-change-transform"
-        style={{
-          backgroundImage: `url('${WEDDING_DATA.couple.bride.photo}')`,
-          filter: "brightness(0.75) contrast(1.05)",
-        }}
-      />
+    <section id="opening" className="relative min-h-[100dvh] w-full flex flex-col justify-between p-8 md:p-16 overflow-hidden bg-[#0a0a0a]">
+      {/* Background Photo Layer */}
+      <motion.div
+        initial={{ scale: 1.05 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 12, ease: "easeOut" }}
+        className="absolute inset-0 z-0"
+      >
+        <img
+          src={WEDDING_DATA.gallery[0]?.url || WEDDING_DATA.couple.bride.photo}
+          alt="The Couple"
+          className="w-full h-full object-cover object-center"
+        />
+        {/* Minimalist Gradient: Darkens only the very top and bottom edges for text contrast, leaving the center pristine */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/70" />
+      </motion.div>
 
-      {/* Very subtle gradient to keep photo clean */}
-      <div className="absolute inset-0 z-1 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
+      {/* Top Header - Swiss Left Aligned */}
+      <motion.div
+        variants={stagger}
+        initial="initial"
+        animate="animate"
+        className="relative z-10 w-full max-w-7xl mx-auto"
+      >
+        <motion.span
+          variants={fadeInUp}
+          className="block text-[10px] md:text-[11px] uppercase tracking-[0.4em] text-white/70 mb-4 font-sans font-medium"
+        >
+          The Wedding Celebration
+        </motion.span>
+        <motion.h1
+          variants={fadeInUp}
+          className="font-serif text-6xl md:text-8xl text-white leading-[0.9] tracking-tight"
+        >
+          {WEDDING_DATA.couple.groom.name.split(" ")[0]}
+          <br className="hidden md:block" />
+          <span className="md:hidden"> </span>
+          <span className="italic font-light text-white/50">&</span>
+          <span className="md:hidden"> </span>
+          <br className="hidden md:block" />
+          {WEDDING_DATA.couple.bride.name.split(" ")[0]}
+        </motion.h1>
+      </motion.div>
 
-      {/* Top Header: Names */}
-      <div className="relative z-10 hero-text opacity-0">
-        <span className="block text-[8px] md:text-[10px] uppercase tracking-[0.5em] text-white/50 mb-3">
-          The Wedding Celebration Of
-        </span>
-        <h1 className="font-serif text-3xl md:text-6xl text-white tracking-widest font-light leading-none">
-          {WEDDING_DATA.couple.groom.name.split(' ')[0]} <span className="italic font-light text-white/60">&</span> {WEDDING_DATA.couple.bride.name.split(' ')[0]}
-        </h1>
-      </div>
+      {/* Bottom Footer - Softened & Mobile Friendly */}
+      <motion.div
+        variants={stagger}
+        initial="initial"
+        animate="animate"
+        className="relative z-10 w-full max-w-7xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-8"
+      >
+        {/* Guest Info & Date Container */}
+        <div className="flex flex-row items-end justify-between md:justify-start md:gap-24 w-full md:w-auto">
+          {/* Guest Name */}
+          <div className="flex flex-col gap-1.5 md:gap-2">
+            <motion.span
+              variants={fadeInUp}
+              className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] text-white/50 font-sans"
+            >
+              Reserved For
+            </motion.span>
+            <motion.h2
+              variants={fadeInUp}
+              className="font-serif text-2xl md:text-4xl text-white font-light"
+            >
+              {guestName}
+            </motion.h2>
+          </div>
 
-      {/* Bottom Footer: Guest Name & Button & Date */}
-      <div className="relative z-10 w-full flex flex-col items-center gap-8 md:gap-10 hero-text opacity-0">
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-[9px] uppercase tracking-[0.3em] text-white/40 italic">Dear,</span>
-          <h2 className="font-serif text-xl md:text-3xl text-white tracking-wide">
-            {guestName}
-          </h2>
+          {/* Date Info (Visible on mobile as well, smaller) */}
+          <div className="hidden md:flex flex-col gap-1.5 md:gap-2 text-right md:text-left">
+            <motion.span
+              variants={fadeInUp}
+              className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] text-white/50 font-sans"
+            >
+              Date
+            </motion.span>
+            <motion.p
+              variants={fadeInUp}
+              className="font-sans text-[11px] md:text-sm tracking-widest text-white uppercase"
+            >
+              {WEDDING_DATA.event.dateFormatted}
+            </motion.p>
+          </div>
         </div>
 
-        {!isOpen && (
-          <button 
-            onClick={onOpen}
-            className="group/btn relative inline-flex items-center gap-4 px-12 py-4 rounded-full border border-white/20 bg-white/5 text-white backdrop-blur-md transition-all duration-500 hover:bg-white hover:text-black hover:scale-105 active:scale-95"
-          >
-            <EnvelopeOpen size={18} weight="light" className="transition-transform group-hover/btn:-rotate-12" />
-            <span className="font-sans text-[11px] font-bold tracking-[0.2em] uppercase">Buka Undangan</span>
-          </button>
-        )}
-
-        <div className="flex flex-col items-center gap-4">
-          <div className="h-px w-8 bg-white/20" />
-          <p className="font-sans text-[10px] md:text-xs tracking-[0.4em] text-white/60 uppercase">
-            {WEDDING_DATA.event.dateFormatted}
-          </p>
+        {/* Action Button */}
+        <div className="w-full md:w-auto flex mt-2 md:mt-0">
+          <AnimatePresence>
+            {!isOpen && (
+              <motion.button
+                variants={fadeInUp}
+                exit={{ opacity: 0, y: 20 }}
+                onClick={onOpen}
+                className="group w-full md:w-auto relative flex items-center justify-between md:justify-center gap-8 px-8 py-4 bg-white/10 backdrop-blur-lg border border-white/20 text-white transition-all duration-500 hover:bg-white hover:text-black active:scale-95 rounded-[2rem]"
+              >
+                <span className="font-sans text-[10px] md:text-xs font-light tracking-[0.25em] uppercase">
+                  Buka Undangan
+                </span>
+                <ArrowRight
+                  size={16}
+                  weight="light"
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                />
+              </motion.button>
+            )}
+          </AnimatePresence>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 };

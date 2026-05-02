@@ -1,7 +1,8 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ArrowsOutSimple, Camera, Image as ImageIcon, Aperture } from "@phosphor-icons/react";
+import { X, ArrowsOutSimple } from "@phosphor-icons/react";
 import { WEDDING_DATA } from "../constants/data";
+import BgGallery from "../assets/dekoratif/latar.webp";
 
 const Gallery = ({ id }: { id?: string }) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -9,23 +10,14 @@ const Gallery = ({ id }: { id?: string }) => {
   return (
     <section
       id={id}
-      className="relative bg-[#0a0a0a] overflow-hidden py-24 md:py-48"
+      className="relative overflow-hidden py-24 md:py-48"
+      style={{
+        backgroundImage: `linear-gradient(rgba(10, 10, 10, 0.9), rgba(10, 10, 10, 0.9)), url(${BgGallery})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+      }}
     >
-      {/* Decorative Floating Icons (Static in this version) */}
-      {[Camera, ImageIcon, Aperture].map((Icon, i) => (
-        <div
-          key={i}
-          className="absolute text-white/5 pointer-events-none z-0"
-          style={{
-            top: `${10 + i * 35}%`,
-            left: i % 2 === 0 ? "2%" : "92%",
-            transform: `rotate(${i * 45}deg)`,
-          }}
-        >
-          <Icon size={60 + i * 40} weight="light" />
-        </div>
-      ))}
-
       <div className="relative z-10">
         {/* Header Block */}
         <div className="max-w-7xl mx-auto px-6 mb-16 md:mb-24">
@@ -41,7 +33,7 @@ const Gallery = ({ id }: { id?: string }) => {
         </div>
 
         {/* Manual Horizontal Scroll Container */}
-        <div className="relative w-full overflow-x-auto overflow-y-hidden no-scrollbar cursor-grab active:cursor-grabbing">
+        <div className="relative w-full overflow-x-auto overflow-y-hidden no-scrollbar">
           <div className="flex gap-6 md:gap-12 px-6 md:px-[10vw] pb-12">
             {WEDDING_DATA.gallery.map((item, index) => (
               <motion.div
@@ -50,16 +42,16 @@ const Gallery = ({ id }: { id?: string }) => {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: index * 0.1 }}
-                className="relative shrink-0 group"
+                className="relative shrink-0 group pointer-events-none"
                 onClick={() => setSelectedImage(item.url)}
               >
                 {/* Double-Bezel Architecture */}
-                <div className="p-2 md:p-3 bg-white/5 rounded-[2.5rem] md:rounded-[4rem] border border-white/10 backdrop-blur-sm transition-all duration-700 group-hover:scale-[1.02] group-hover:bg-white/10">
+                <div className="p-2 md:p-3 bg-white/5 rounded-[2.5rem] md:rounded-[4rem] border border-white/10 backdrop-blur-sm transition-all duration-700 group-hover:bg-white/10">
                   <div className="relative overflow-hidden rounded-[2rem] md:rounded-[3.2rem] bg-zinc-900 aspect-[4/5] md:aspect-[3/4] h-[50vh] md:h-[65vh]">
                     <img
                       src={item.url}
                       alt={`Gallery ${index}`}
-                      className="w-full h-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-110"
+                      className="w-full h-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-105"
                       loading="lazy"
                     />
 
@@ -71,17 +63,17 @@ const Gallery = ({ id }: { id?: string }) => {
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Metadata */}
                 <div className="mt-6 px-4 flex items-center justify-between opacity-40">
                   <span className="font-mono text-[10px] uppercase tracking-widest">
-                    {(index + 1).toString().padStart(2, '0')}
+                    {(index + 1).toString().padStart(2, "0")}
                   </span>
                   <div className="w-8 h-px bg-white/20" />
                 </div>
               </motion.div>
             ))}
-            
+
             {/* End Space */}
             <div className="shrink-0 w-[5vw] md:w-[10vw]" />
           </div>
@@ -90,7 +82,9 @@ const Gallery = ({ id }: { id?: string }) => {
         {/* Hint for Scroll */}
         <div className="max-w-7xl mx-auto px-6 mt-8 flex justify-end">
           <div className="flex items-center gap-4 text-white/20">
-            <span className="text-[9px] uppercase tracking-[0.3em]">Swipe to explore</span>
+            <span className="text-[9px] uppercase tracking-[0.3em]">
+              Swipe to explore
+            </span>
             <div className="w-12 h-px bg-white/10" />
           </div>
         </div>

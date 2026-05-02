@@ -16,20 +16,20 @@ export const WEDDING_DATA = {
     },
   },
   event: {
-    date: "2026-04-30",
+    date: "2026-05-30",
     time: "08:00:00", // Start time for countdown
-    countdownTarget: "2026-04-30T08:00:00",
-    dateFormatted: "Thursday, 30 April 2026",
+    countdownTarget: "2026-05-30T08:00:00",
+    dateFormatted: "Kamis, 30 May 2026",
 
     location: "Grand Ballroom, Jakarta",
     akad: {
-      time: "08:00 - 10:00 WIB",
+      time: "08:00 - 10:00",
       venue: "Masjid Agung At-Tin",
       address: "Jl. Taman Mini Indonesia Indah, Jakarta Timur",
       maps: "https://maps.app.goo.gl/xyz123",
     },
     resepsi: {
-      time: "11:00 - 13:00 WIB",
+      time: "11:00 - 13:00",
       venue: "Grand Ballroom Hotel Mulia",
       address: "Jl. Asia Afrika, Senayan, Jakarta Pusat",
       maps: "https://maps.app.goo.gl/abc456",

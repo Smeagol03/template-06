@@ -55,27 +55,19 @@ const Invitation = () => {
       {isOpen && <FloatingNav />}
 
       {/* 1. Opening Section */}
-      <section id="opening">
-        <Opening onOpen={() => setIsOpen(true)} isOpen={isOpen} />
-      </section>
+      <Opening onOpen={() => setIsOpen(true)} isOpen={isOpen} />
 
       {/* Salam Section */}
       {isOpen && <Salam />}
 
       {/* 2. Couple Section */}
-      <section id="couple">
-        <Couple />
-      </section>
+      <Couple />
 
       {/* 3. Love Story Section */}
-      <section id="story">
-        <LoveStory />
-      </section>
+      <LoveStory />
 
       {/* 4. Event Details Section */}
-      <section id="event" className="py-12 md:py-24">
-        <EventDetails />
-      </section>
+      <EventDetails />
 
       {/* 5. Countdown Timer Section */}
       <Countdown />

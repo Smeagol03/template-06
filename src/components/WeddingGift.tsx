@@ -1,21 +1,38 @@
 import { useState, useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { Copy, Check, Gift, Bank, Coins, CreditCard } from "@phosphor-icons/react";
+import {
+  Copy,
+  Check,
+  Gift,
+  Bank,
+  Coins,
+  CreditCard,
+} from "@phosphor-icons/react";
 import { WEDDING_DATA } from "../constants/data";
 
-const FloatingIcon = ({ i, scrollYProgress }: { i: number; scrollYProgress: any }) => {
+const FloatingIcon = ({
+  i,
+  scrollYProgress,
+}: {
+  i: number;
+  scrollYProgress: any;
+}) => {
   const Icons = [Gift, Bank, Coins, CreditCard];
   const Icon = Icons[i % Icons.length];
-  
+
   const y = useTransform(scrollYProgress, [0, 1], [0, -(100 + i * 30)]);
-  const rotate = useTransform(scrollYProgress, [0, 1], [0, i % 2 === 0 ? 25 : -25]);
+  const rotate = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [0, i % 2 === 0 ? 25 : -25],
+  );
   const smoothY = useSpring(y, { stiffness: 45, damping: 25 });
 
   const positions = [
-    { top: '10%', left: '5%' },
-    { top: '20%', left: '85%' },
-    { top: '75%', left: '10%' },
-    { top: '85%', left: '80%' },
+    { top: "10%", left: "5%" },
+    { top: "20%", left: "85%" },
+    { top: "75%", left: "10%" },
+    { top: "85%", left: "80%" },
   ];
 
   return (
@@ -25,11 +42,11 @@ const FloatingIcon = ({ i, scrollYProgress }: { i: number; scrollYProgress: any 
         rotate,
         top: positions[i % positions.length].top,
         left: positions[i % positions.length].left,
-        opacity: 0.05 + (i * 0.01),
+        opacity: 0.05 + i * 0.01,
       }}
       className="absolute text-white pointer-events-none z-20"
     >
-      <Icon size={30 + (i * 15)} weight="light" />
+      <Icon size={30 + i * 15} weight="light" />
     </motion.div>
   );
 };
@@ -60,7 +77,7 @@ const WeddingGift = () => {
 
       <div className="max-w-4xl mx-auto text-center relative z-10">
         {/* Header */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -86,7 +103,7 @@ const WeddingGift = () => {
         </motion.div>
 
         {/* Bank Card with Double Bezel Architecture */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
@@ -96,7 +113,7 @@ const WeddingGift = () => {
           <div className="relative z-10 p-8 md:p-12 rounded-[2.5rem] md:rounded-[3rem] bg-white/[0.03] border border-white/10 backdrop-blur-xl overflow-hidden flex flex-col items-center">
             {/* Subtle Inner Highlight */}
             <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-            
+
             {/* Bank Badge */}
             <div className="px-5 py-2 rounded-full bg-white text-black font-sans text-[10px] font-bold tracking-[0.2em] uppercase mb-10">
               {WEDDING_DATA.links.weddingGift.bank}
@@ -119,7 +136,7 @@ const WeddingGift = () => {
               `}
             >
               <span className="font-sans text-[11px] font-bold tracking-[0.2em] uppercase">
-                {copied ? "Copied Successfully" : "Copy Number"}
+                {copied ? "Copied Successfully" : "Salin"}
               </span>
               <div
                 className={`w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300
@@ -143,7 +160,7 @@ const WeddingGift = () => {
         </motion.div>
 
         {/* Small Note */}
-        <motion.p 
+        <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}

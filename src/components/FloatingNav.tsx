@@ -6,35 +6,44 @@ import {
   BookOpen,
   CalendarHeart,
   MapPin,
-  Broadcast,
   Image as ImageIcon,
   ChatCenteredDots,
 } from "@phosphor-icons/react";
 
 const FloatingNav = () => {
   const [activeSection, setActiveSection] = useState("opening");
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   const navItems = [
-    { icon: House, label: "Home", target: "opening" },
-    { icon: Users, label: "Couple", target: "couple" },
-    { icon: BookOpen, label: "Story", target: "story" },
-    { icon: CalendarHeart, label: "Event", target: "event" },
-    { icon: MapPin, label: "Maps", target: "location" },
-    { icon: ImageIcon, label: "Gallery", target: "gallery" },
-    { icon: ChatCenteredDots, label: "RSVP", target: "rsvp" },
+    { icon: House, target: "opening" },
+    { icon: Users, target: "couple" },
+    { icon: BookOpen, target: "story" },
+    { icon: CalendarHeart, target: "event" },
+    { icon: MapPin, target: "location" },
+    { icon: ImageIcon, target: "gallery" },
+    { icon: ChatCenteredDots, target: "rsvp" },
   ];
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = navItems.map(item => item.target);
+      const currentScrollY = window.scrollY;
       
-      // Find current section with a more robust threshold
+      // Auto-hide/show on scroll
+      if (currentScrollY > lastScrollY && currentScrollY > 200) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+      setLastScrollY(currentScrollY);
+
+      // Section tracking
+      const sections = navItems.map(item => item.target);
       const current = sections.find(section => {
         const element = document.getElementById(section);
         if (element) {
           const rect = element.getBoundingClientRect();
-          // Adjust threshold for mobile and pinning sections
-          return rect.top <= 150 && rect.bottom >= 150;
+          return rect.top <= 200 && rect.bottom >= 200;
         }
         return false;
       });
@@ -46,57 +55,67 @@ const FloatingNav = () => {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [activeSection]);
-
+  }, [activeSection, lastScrollY]);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      const offset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
     }
   };
 
   return (
-    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] px-4 w-full max-w-fit pointer-events-none">
-      <motion.nav
-        layout
-        initial={{ y: 100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className="pointer-events-auto flex items-center gap-1.5 p-1.5 rounded-full bg-black/80 backdrop-blur-2xl border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
-      >
-        {navItems.map((item, index) => {
-          const isActive = activeSection === item.target;
-          
-          return (
-            <button
-              key={index}
-              onClick={() => scrollToSection(item.target)}
-              className={`relative flex items-center justify-center transition-all duration-500 rounded-full h-11 w-11
-                ${isActive ? "bg-white text-black" : "text-white/40 hover:text-white hover:bg-white/5"}
-              `}
-            >
-              <item.icon
-                size={20}
-                weight={isActive ? "fill" : "light"}
-                className="transition-colors duration-500"
-              />
-
-              {/* Active Indicator Background (Shared Layout) */}
-              {isActive && (
-                <motion.div
-                  layoutId="nav-active-bg"
-                  className="absolute inset-0 rounded-full bg-white z-[-1]"
-                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                />
-              )}
-            </button>
-          );
-        })}
-      </motion.nav>
-    </div>
+    <AnimatePresence>
+      {isVisible && (
+        <motion.div 
+          initial={{ y: 100, x: "-50%", opacity: 0 }}
+          animate={{ y: 0, x: "-50%", opacity: 1 }}
+          exit={{ y: 100, x: "-50%", opacity: 0 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="fixed bottom-6 md:bottom-8 left-1/2 z-[100] px-4 w-fit"
+        >
+          <nav className="flex items-center gap-1 md:gap-2 p-1.5 rounded-full bg-black/60 backdrop-blur-xl border border-white/10 shadow-2xl">
+            {navItems.map((item, index) => {
+              const isActive = activeSection === item.target;
+              
+              return (
+                <button
+                  key={index}
+                  onClick={() => scrollToSection(item.target)}
+                  className="relative flex items-center justify-center transition-all duration-300 rounded-full h-10 w-10 md:h-12 md:w-12 group"
+                >
+                  {/* Hover/Active Effect */}
+                  {isActive && (
+                    <motion.div
+                      layoutId="nav-bg"
+                      className="absolute inset-0 rounded-full bg-white"
+                      transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                    />
+                  )}
+                  
+                  <item.icon
+                    size={isActive ? 20 : 18}
+                    weight={isActive ? "fill" : "light"}
+                    className={`relative z-10 transition-colors duration-300 ${
+                      isActive ? "text-black" : "text-white/40 group-hover:text-white"
+                    }`}
+                  />
+                </button>
+              );
+            })}
+          </nav>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
-
 
 export default FloatingNav;
 
