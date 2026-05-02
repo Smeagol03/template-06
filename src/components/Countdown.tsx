@@ -95,7 +95,7 @@ const Countdown = () => {
 
       {/* 2. Magical Sparkles Layer */}
       <div className="absolute inset-0 z-0">
-        {[...Array(20)].map((_, i) => (
+        {[...Array(12)].map((_, i) => (
           <MagicalSparkle key={i} index={i} />
         ))}
       </div>

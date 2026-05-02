@@ -26,30 +26,38 @@ const FloatingNav = () => {
   ];
 
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      // Auto-hide/show on scroll
-      if (currentScrollY > lastScrollY && currentScrollY > 200) {
-        setIsVisible(false);
-      } else {
-        setIsVisible(true);
-      }
-      setLastScrollY(currentScrollY);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+          
+          // Auto-hide/show logic
+          if (currentScrollY > lastScrollY && currentScrollY > 200) {
+            setIsVisible(false);
+          } else {
+            setIsVisible(true);
+          }
+          setLastScrollY(currentScrollY);
 
-      // Section tracking
-      const sections = navItems.map(item => item.target);
-      const current = sections.find(section => {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          return rect.top <= 200 && rect.bottom >= 200;
-        }
-        return false;
-      });
+          // Section tracking with threshold
+          const sections = navItems.map(item => item.target);
+          const current = sections.find(section => {
+            const element = document.getElementById(section);
+            if (element) {
+              const rect = element.getBoundingClientRect();
+              return rect.top <= 200 && rect.bottom >= 200;
+            }
+            return false;
+          });
 
-      if (current && current !== activeSection) {
-        setActiveSection(current);
+          if (current && current !== activeSection) {
+            setActiveSection(current);
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 

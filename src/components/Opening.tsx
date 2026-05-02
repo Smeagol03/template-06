@@ -41,13 +41,13 @@ const Opening = ({ onOpen, isOpen }: OpeningProps) => {
   };
 
   return (
-    <section id="opening" className="relative min-h-[100dvh] w-full flex flex-col justify-between p-8 md:p-16 overflow-hidden bg-[#0a0a0a]">
+    <section id="opening" className="relative h-screen min-h-[600px] w-full flex flex-col justify-between p-8 md:p-16 overflow-hidden bg-[#0a0a0a]">
       {/* Background Photo Layer */}
       <motion.div
-        initial={{ scale: 1.05 }}
+        initial={{ scale: 1.1 }}
         animate={{ scale: 1 }}
-        transition={{ duration: 12, ease: "easeOut" }}
-        className="absolute inset-0 z-0"
+        transition={{ duration: 15, ease: "linear" }}
+        className="absolute inset-0 z-0 will-change-transform"
       >
         <img
           src={WEDDING_DATA.gallery[0]?.url || WEDDING_DATA.couple.bride.photo}
