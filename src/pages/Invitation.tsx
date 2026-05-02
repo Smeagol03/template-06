@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { MusicNote, SpeakerHigh, SpeakerSlash } from "@phosphor-icons/react";
 import Opening from "../components/Opening";
 import Salam from "../components/Salam";
 import Couple from "../components/Couple";
@@ -20,7 +22,19 @@ import { WEDDING_DATA } from "../constants/data";
 
 const Invitation = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const toggleMusic = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play().catch(err => console.log("Audio play blocked:", err));
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
 
   // Handle scroll lock for invitation
   useEffect(() => {
@@ -28,6 +42,7 @@ const Invitation = () => {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "auto";
+      setIsPlaying(true);
       const salamSection = document.getElementById("salam");
       if (salamSection) {
         salamSection.scrollIntoView({ behavior: "smooth" });
@@ -50,6 +65,48 @@ const Invitation = () => {
 
       {/* Background Music */}
       <audio ref={audioRef} src={WEDDING_DATA.musicUrl} loop />
+
+      {/* Floating Music Controller */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="fixed top-6 right-6 z-[110] flex items-center gap-3 pointer-events-none"
+          >
+            <div className="flex flex-col items-end gap-1">
+              <div className="px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center gap-2 overflow-hidden max-w-[150px] md:max-w-[200px]">
+                <MusicNote size={12} weight="fill" className="text-white/60 shrink-0" />
+                <div className="relative overflow-hidden whitespace-nowrap">
+                  <motion.p 
+                    animate={{ x: [0, -100, 0] }}
+                    transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                    className="text-[9px] uppercase tracking-widest text-white/80 font-sans"
+                  >
+                    {WEDDING_DATA.musicTitle}
+                  </motion.p>
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={toggleMusic}
+              className="pointer-events-auto w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all duration-500 shadow-2xl"
+            >
+              <motion.div
+                animate={isPlaying ? { rotate: 360 } : {}}
+                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+              >
+                {isPlaying ? (
+                  <SpeakerHigh size={18} weight="light" />
+                ) : (
+                  <SpeakerSlash size={18} weight="light" />
+                )}
+              </motion.div>
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Floating Elements - Conditional Visibility */}
       {isOpen && <FloatingNav />}

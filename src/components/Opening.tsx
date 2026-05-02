@@ -41,7 +41,7 @@ const Opening = ({ onOpen, isOpen }: OpeningProps) => {
   };
 
   return (
-    <section id="opening" className="relative h-screen min-h-[600px] w-full flex flex-col justify-between p-8 md:p-16 overflow-hidden bg-[#0a0a0a]">
+    <section id="opening" className="relative h-screen min-h-[600px] w-full flex flex-col justify-between p-8 pb-24 md:p-16 overflow-hidden bg-[#0a0a0a]">
       {/* Background Photo Layer */}
       <motion.div
         initial={{ scale: 1.1 }}
@@ -55,7 +55,7 @@ const Opening = ({ onOpen, isOpen }: OpeningProps) => {
           className="w-full h-full object-cover object-center"
         />
         {/* Minimalist Gradient: Darkens only the very top and bottom edges for text contrast, leaving the center pristine */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80" />
       </motion.div>
 
       {/* Top Header - Swiss Left Aligned */}
@@ -90,7 +90,7 @@ const Opening = ({ onOpen, isOpen }: OpeningProps) => {
         variants={stagger}
         initial="initial"
         animate="animate"
-        className="relative z-10 w-full max-w-7xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-8"
+        className="relative z-10 w-full max-w-7xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-10 md:gap-8 mb-4 md:mb-0"
       >
         {/* Guest Info & Date Container */}
         <div className="flex flex-row items-end justify-between md:justify-start md:gap-24 w-full md:w-auto">
@@ -135,7 +135,7 @@ const Opening = ({ onOpen, isOpen }: OpeningProps) => {
                 variants={fadeInUp}
                 exit={{ opacity: 0, y: 20 }}
                 onClick={onOpen}
-                className="group w-full md:w-auto relative flex items-center justify-between md:justify-center gap-8 px-8 py-4 bg-white/10 backdrop-blur-lg border border-white/20 text-white transition-all duration-500 hover:bg-white hover:text-black active:scale-95 rounded-[2rem]"
+                className="group w-full md:w-auto relative flex items-center justify-between md:justify-center gap-8 px-8 py-4 bg-white/10 backdrop-blur-lg border border-white/20 text-white transition-all duration-500 hover:bg-white hover:text-black active:scale-95 rounded-4xl"
               >
                 <span className="font-sans text-[10px] md:text-xs font-light tracking-[0.25em] uppercase">
                   Buka Undangan
